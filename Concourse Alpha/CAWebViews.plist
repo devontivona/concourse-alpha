@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>title</key>
+		<string>Group Feed</string>
+		<key>url</key>
+		<string>feed</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>Discussions</string>
+		<key>url</key>
+		<string>discussion</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>Traveler Profiles</string>
+		<key>url</key>
+		<string>profiles</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>Individual Profile</string>
+		<key>url</key>
+		<string>profile</string>
+	</dict>
+    <dict>
+		<key>title</key>
+		<string>Individual Trips</string>
+		<key>url</key>
+		<string>trips</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>Iternary</string>
+		<key>url</key>
+		<string>iternary</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>Country Info</string>
+		<key>url</key>
+		<string>country</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>Weather</string>
+		<key>url</key>
+		<string>weather</string>
+	</dict>
+</array>
+</plist>
