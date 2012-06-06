@@ -6,11 +6,40 @@
 //  Copyright (c) 2012 University of Colorado, Boulder. All rights reserved.
 //
 
+@interface NSURLRequest (DummyInterface)
++ (BOOL)allowsAnyHTTPSCertificateForHost:(NSString*)host;
++ (void)setAllowsAnyHTTPSCertificate:(BOOL)allow forHost:(NSString*)host;
+@end
+
 #import "CAAppDelegate.h"
 
 @implementation CAAppDelegate
 
 @synthesize window = _window;
+
++ (void)initialize {
+    // Set user agent
+
+    NSString *userAgent;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        userAgent = @"concourse-ipad";
+    } else {
+        userAgent = @"concourse-iphone";
+    }
+    
+    if ([UIScreen mainScreen].scale > 1.0) {
+        userAgent = [NSString stringWithFormat:@"%@-retina", userAgent];
+    }
+    
+    NSDictionary *userDefaults = [[NSDictionary alloc] initWithObjectsAndKeys:userAgent, @"UserAgent", nil];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:userDefaults];
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+    NSLog(@"Connection did fail with error: %@", error.localizedDescription);
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -20,6 +49,31 @@
         UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
         splitViewController.delegate = (id)navigationController.topViewController;
     }
+    
+    NSString *post = @"single_access_token=JSzdH3BoAe3epvcxZjmb";
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
+    
+    NSString *baseUrl = [[NSUserDefaults standardUserDefaults] objectForKey:@"CABaseURL"];
+    NSString *urlString = [NSString stringWithFormat:@"%@/api/user_sessions", baseUrl];
+
+    
+    NSLog(@"URL: %@", urlString);
+    
+    NSURL *url = [[NSURL alloc] initWithString:urlString];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    
+    [NSURLRequest setAllowsAnyHTTPSCertificate:YES forHost:[url host]];
+    
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    [connection start];
+
     return YES;
 }
 							

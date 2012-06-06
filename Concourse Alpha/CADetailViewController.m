@@ -35,11 +35,14 @@
     } else {
         device = @"iphone";
     }
-    
+        
     self.navigationItem.title = [_properties objectForKey:@"title"];
     
     NSString *baseUrl = [[NSUserDefaults standardUserDefaults] objectForKey:@"CABaseURL"];
-    NSString *urlString = [NSString stringWithFormat:@"%@/external.php?page=%@&device=%@", baseUrl, [_properties objectForKey:@"url"], device];
+    NSString *urlString = [NSString stringWithFormat:@"%@/%@?brand_id=33", baseUrl, [_properties objectForKey:@"url"]];
+    
+    NSLog(@"URL: %@", urlString);
+    
     NSURL *url = [[NSURL alloc] initWithString:urlString];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLCacheStorageNotAllowed timeoutInterval:10.0];
     [self.webView loadRequest:request];
@@ -62,12 +65,16 @@
         if ([view isKindOfClass:[UIImageView class]]) { view.hidden = YES; } 
     }
     
+    UIScrollView *scrollView = [self.webView.subviews objectAtIndex:0];
+    [scrollView setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
+    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         UIButton *backButton = [CAAppDelegate texturedBackButtonWithTitle:@"Back"];
         [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
         UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
         self.navigationItem.leftBarButtonItem = backBarButtonItem;
     }
+    
     
     [self.webView setOpaque:NO];
     self.webView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"CABackground"]];
